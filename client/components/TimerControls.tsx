@@ -9,7 +9,7 @@ interface TimerControlsProps {
   handleSelectionChange: (keys: Set<string>) => void;
   selectedTimer: string;
   activeChips: any[];
-  startBreak: () => void;
+  claimBreak: () => void;
   resetTimer: () => void;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -21,7 +21,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   handleSelectionChange,
   selectedTimer,
   activeChips,
-  startBreak,
+  claimBreak,
   resetTimer,
   setCurrentState
 }) => {
@@ -106,9 +106,8 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
 
       {currentState === "timer_finished" && (
         <>
-          <Button onPress={startBreak} color="success" variant="shadow">Start Break</Button>
+          <Button onPress={claimBreak} color="success" variant="flat">Claim Break</Button>
           <Button onPress={resetTimer} color="default" variant="flat">Skip Break</Button>
-          <Button onPress={() => setCurrentState("neutral")} color="primary" variant="flat">New Session</Button>
         </>
       )}
 

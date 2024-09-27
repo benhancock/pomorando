@@ -3,11 +3,24 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { Tooltip } from "@nextui-org/react";
 import { ClockIcon, TrendingUpIcon } from "@/components/icons";
-
 import { ActiveChips } from "@/components/ActiveChips";
 import { TimerDisplay } from "@/components/TimerDisplay";
 import { TimerControls } from "@/components/TimerControls";
 import { CustomTimePopover } from "@/components/CustomTimePopover";
+
+interface breakOutcomeDataInterface {
+  descriptor: string;
+  type: string;
+  probability: number;
+}
+
+export interface breakOutcomeInterface {
+  id: string;
+  color: "default" | "primary" | "secondary" | "success" | "warning" | "danger" | undefined;
+  icon: JSX.Element;
+  tooltipContent: JSX.Element;
+  data: breakOutcomeDataInterface;
+}
 
 export default function Home() {
   const [selectedTimer, setSelectedTimer] = useState<string>("medium");
@@ -18,6 +31,7 @@ export default function Home() {
   const [remainingTime, setRemainingTime] = useState<number>(timerValue * 60);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [breakDuration, setBreakDuration] = useState<number>(5);
+  const [breakOutcome, setBreakOutcome] = useState<breakOutcomeInterface|null>(null);
 
   const [activeChips, setActiveChips] = useState([
     {
@@ -148,7 +162,42 @@ export default function Home() {
     setIntervalId(interval);
   };
 
-  const startBreak = () => {
+  const getRandomBreak = () => {
+    const outcomeProbabilities = [
+      {descriptor: "browse social media", type: "reward", probability: 0.2},
+      {descriptor: "take a break", type: "break", probability: 0.6},
+      {descriptor: "review your work", type: "action", probability: 0.19},
+      {descriptor: "buy yourself a gift", type: "reward", probability: 0.01},
+    ];
+
+    let cumulativeProbability = 0;
+    let randomValue = Math.random();
+
+    for (const outcome of outcomeProbabilities) {
+      cumulativeProbability += outcome.probability;
+      if (randomValue < cumulativeProbability) {
+        return outcome;
+      }
+    }
+
+    return outcomeProbabilities[outcomeProbabilities.length - 1];
+  };
+
+  const claimBreak = () => {
+    const outcomeData: breakOutcomeDataInterface = getRandomBreak();
+    const outcome: breakOutcomeInterface = {
+      id: outcomeData.descriptor,
+      color: outcomeData.type === "reward" ? "success" : outcomeData.type === "break" ? "warning" : "danger",
+      icon: <TrendingUpIcon className="size-6" />,
+      tooltipContent: (
+        <div className="flex items-center">
+          <p>Base probaility: {outcomeData.probability}</p>
+        </div>
+      ),
+      data: outcomeData
+    };
+    setBreakOutcome(outcome);
+
     setCurrentState("break_running");
     const interval = setInterval(() => {
       setRemainingTime((prevTime) => {
@@ -169,6 +218,7 @@ export default function Home() {
       setIntervalId(null);
     }
     setCurrentState("neutral");
+    setBreakOutcome(null);
     setRemainingTime(timerValue * 60);
     setActiveChips([]);
   };
@@ -198,7 +248,7 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block text-center justify-center" style={{ width: '30%' }}>
         <div className="relative z-10">
-          <ActiveChips activeChips={activeChips} />
+          <ActiveChips activeChips={activeChips} breakOutcome={breakOutcome} />
 
           <br />
 
@@ -216,7 +266,7 @@ export default function Home() {
             handleSelectionChange={handleSelectionChange}
             selectedTimer={selectedTimer}
             activeChips={activeChips}
-            startBreak={startBreak}
+            claimBreak={claimBreak}
             resetTimer={resetTimer}
             setCurrentState={setCurrentState}
           />
