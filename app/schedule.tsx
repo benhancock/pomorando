@@ -6,7 +6,7 @@ import { ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function About() {
+export default function Schedule() {
   const router = useRouter();
 
   return (
@@ -16,23 +16,14 @@ export default function About() {
           <Box className="p-6">
             <Box className="flex-row items-center mb-6">
               <Button
-                variant="outline"
+                variant="link"
                 onPress={() => router.back()}
-                className="mr-4"
+                className="mr-8"
               >
                 <Text>← Back</Text>
               </Button>
               <Text className="text-2xl font-bold text-typography-900">
-                About
-              </Text>
-            </Box>
-
-            <Box className="p-6 rounded-lg shadow-sm">
-              <Text className="text-lg text-typography-700 mb-4">
-                Test About Page
-              </Text>
-              <Text className="text-typography-600 mb-4">
-                Test Text Contents
+                Reward Schedule
               </Text>
             </Box>
           </Box>
