@@ -1,17 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box } from '@/components/ui/box';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView, Pressable } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { InfoIcon, CalendarDaysIcon, SettingsIcon } from '@/components/ui/icon';
 
 import { useRouter } from 'expo-router';
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetItem,
+  ActionsheetItemText,
+  ActionsheetSectionHeaderText,
+} from '@/components/ui/actionsheet';
 
 const Timer = () => {
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [showTimerSelector, setShowTimerSelector] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const formatTime = (seconds: number) => {
@@ -44,6 +54,21 @@ const Timer = () => {
     }
   };
 
+  const showTimerLengthSelector = () => {
+    setShowTimerSelector(true);
+  };
+
+  const handleTimerLengthChange = (value: string) => {
+    const minutes = parseInt(value);
+    setTimeLeft(minutes * 60);
+    setShowTimerSelector(false);
+    setIsRunning(false);
+    setIsPaused(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
   useEffect(() => {
     if (isRunning && !isPaused) {
       intervalRef.current = setInterval(() => {
@@ -70,12 +95,48 @@ const Timer = () => {
   }, [isRunning, isPaused]);
 
   return (
-    <Box className="items-center mb-8">
-      <Box>
-        <Text className="text-typography-900 text-6xl font-mono font-bold">
-          {formatTime(timeLeft)}
-        </Text>
+    <Box className="items-center">
+      <Box className="mt-20 mb-2">
+        <Pressable
+          onPress={showTimerLengthSelector}
+          className="active:opacity-70"
+        >
+          <Text className="text-typography-900 text-8xl font-mono font-bold">
+            {formatTime(timeLeft)}
+          </Text>
+        </Pressable>
       </Box>
+
+      <Actionsheet
+        isOpen={showTimerSelector}
+        onClose={() => setShowTimerSelector(false)}
+      >
+        <ActionsheetBackdrop />
+        <ActionsheetContent>
+          <ActionsheetDragIndicator />
+          <ActionsheetSectionHeaderText size="md" className="normal-case pt-5">
+            Select Timer Length
+          </ActionsheetSectionHeaderText>
+          <ActionsheetItem onPress={() => handleTimerLengthChange('15')}>
+            <ActionsheetItemText size="md">15 minutes</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => handleTimerLengthChange('20')}>
+            <ActionsheetItemText size="md">20 minutes</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => handleTimerLengthChange('25')}>
+            <ActionsheetItemText size="md">25 minutes</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => handleTimerLengthChange('30')}>
+            <ActionsheetItemText size="md">30 minutes</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => handleTimerLengthChange('45')}>
+            <ActionsheetItemText size="md">45 minutes</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => handleTimerLengthChange('60')}>
+            <ActionsheetItemText size="md">60 minutes</ActionsheetItemText>
+          </ActionsheetItem>
+        </ActionsheetContent>
+      </Actionsheet>
 
       <Box className="flex-row gap-4">
         {!isRunning ? (
