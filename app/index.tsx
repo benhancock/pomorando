@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Box } from "@/components/ui/box";
-import { SafeAreaView, ScrollView } from "react-native";
-import { Text } from "@/components/ui/text";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
-import { InfoIcon, CalendarDaysIcon, SettingsIcon } from "@/components/ui/icon";
+import React, { useState, useEffect, useRef } from 'react';
+import { Box } from '@/components/ui/box';
+import { SafeAreaView, ScrollView } from 'react-native';
+import { Text } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
+import { Icon } from '@/components/ui/icon';
+import { InfoIcon, CalendarDaysIcon, SettingsIcon } from '@/components/ui/icon';
 
-import { useRouter } from "expo-router";
+import { useRouter } from 'expo-router';
 
 const Timer = () => {
   const [timeLeft, setTimeLeft] = useState(25 * 60);
@@ -47,7 +47,7 @@ const Timer = () => {
   useEffect(() => {
     if (isRunning && !isPaused) {
       intervalRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
+        setTimeLeft(prev => {
           if (prev <= 1) {
             setIsRunning(false);
             setIsPaused(false);
@@ -76,35 +76,27 @@ const Timer = () => {
           {formatTime(timeLeft)}
         </Text>
       </Box>
-      
+
       <Box className="flex-row gap-4">
         {!isRunning ? (
-          <Button
-            onPress={startTimer}            
-          >
+          <Button onPress={startTimer}>
             <Text className="text-black font-medium text-lg">Start</Text>
           </Button>
         ) : (
           <>
             {isPaused ? (
-              <Button
-                onPress={startTimer}
-              >
+              <Button onPress={startTimer}>
                 <Text className="text-black font-medium text-lg">Resume</Text>
               </Button>
             ) : (
-              <Button
-                onPress={pauseTimer}
-                
-              >
+              <Button onPress={pauseTimer}>
                 <Text className="text-black font-medium text-lg">Pause</Text>
               </Button>
             )}
-            <Button
-              onPress={resetTimer}
-              variant="outline"
-            >
-              <Text className="text-typography-white font-medium text-lg">Reset</Text>
+            <Button onPress={resetTimer} variant="outline">
+              <Text className="text-typography-white font-medium text-lg">
+                Reset
+              </Text>
             </Button>
           </>
         )}
@@ -118,42 +110,47 @@ export default function Home() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <Box className="flex-1 bg-black h-[100vh]">
-      
+      <Box className="flex-1 bg-black h-[100vh]">
         <Box className="flex flex-1 items-center mx-5 lg:mx-32">
           <Box className="gap-3 flex-row md:self-start">
             <Button
-              onPress={() => router.push("/stats")}
+              onPress={() => router.push('/stats')}
               className="bg-background-template py-2 px-6 rounded-full"
             >
               <Icon as={InfoIcon} size="sm" className="text-typography-white" />
-              <Text className="text-typography-white font-medium">
-                Stats
-              </Text>
+              <Text className="text-typography-white font-medium">Stats</Text>
             </Button>
             <Button
-              onPress={() => router.push("/schedule")}
+              onPress={() => router.push('/schedule')}
               className="bg-background-template py-2 px-6 rounded-full"
             >
-              <Icon as={CalendarDaysIcon} size="sm" className="text-typography-white" />
+              <Icon
+                as={CalendarDaysIcon}
+                size="sm"
+                className="text-typography-white"
+              />
               <Text className="text-typography-white font-medium">
                 Schedule
               </Text>
             </Button>
             <Button
-              onPress={() => router.push("/settings")}
+              onPress={() => router.push('/settings')}
               className="bg-background-template py-2 px-6 rounded-full"
             >
-              <Icon as={SettingsIcon} size="sm" className="text-typography-white" />
+              <Icon
+                as={SettingsIcon}
+                size="sm"
+                className="text-typography-white"
+              />
               <Text className="text-typography-white font-medium">
                 Settings
               </Text>
             </Button>
           </Box>
-          
+
           <Timer />
         </Box>
-    </Box>
+      </Box>
     </SafeAreaView>
   );
 }
