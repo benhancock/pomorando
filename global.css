@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom animations for glowing border effect */
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes glow-rotate {
+  0% {
+    background: linear-gradient(45deg, #fbbf24, #ec4899, #8b5cf6);
+  }
+  33% {
+    background: linear-gradient(45deg, #3b82f6, #10b981, #fbbf24);
+  }
+  66% {
+    background: linear-gradient(45deg, #8b5cf6, #ec4899, #f97316);
+  }
+  100% {
+    background: linear-gradient(45deg, #fbbf24, #ec4899, #8b5cf6);
+  }
+}
+
+@keyframes glow-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.glow-rotate {
+  animation: glow-rotate 3s linear infinite;
+}
+
+.glow-shift {
+  animation: glow-shift 2s ease-in-out infinite;
+  background-size: 200% 200%;
+}
