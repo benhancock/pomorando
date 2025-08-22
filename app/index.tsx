@@ -79,7 +79,13 @@ const Timer = () => {
 
       <Box className="flex-row gap-4">
         {!isRunning ? (
-          <Button onPress={startTimer}>
+          <Button
+            variant="solid"
+            action="primary"
+            size="lg"
+            onPress={startTimer}
+            className="rounded-full active:scale-40"
+          >
             <Text className="text-typography-900 font-medium text-lg">
               Start
             </Text>
@@ -87,19 +93,37 @@ const Timer = () => {
         ) : (
           <>
             {isPaused ? (
-              <Button onPress={startTimer}>
+              <Button
+                variant="solid"
+                action="primary"
+                size="lg"
+                onPress={startTimer}
+                className="rounded-full active:bg-primary-300"
+              >
                 <Text className="text-typography-900 font-medium text-lg">
                   Resume
                 </Text>
               </Button>
             ) : (
-              <Button onPress={pauseTimer}>
+              <Button
+                variant="solid"
+                action="primary"
+                size="lg"
+                onPress={pauseTimer}
+                className="rounded-full"
+              >
                 <Text className="text-typography-900 font-medium text-lg">
                   Pause
                 </Text>
               </Button>
             )}
-            <Button onPress={resetTimer} variant="outline">
+            <Button
+              variant="solid"
+              action="primary"
+              size="lg"
+              onPress={resetTimer}
+              className="rounded-full"
+            >
               <Text className="text-typography-900 font-medium text-lg">
                 Reset
               </Text>

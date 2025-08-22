@@ -155,18 +155,17 @@ export const config = {
     '--color-indicator-error': '185 28 28',
   }),
   dark: vars({
-    '--color-primary-0': '166 166 166',
-    '--color-primary-50': '175 175 175',
-    '--color-primary-100': '186 186 186',
-    '--color-primary-200': '197 197 197',
-    '--color-primary-300': '212 212 212',
-    '--color-primary-400': '221 221 221',
-    '--color-primary-500': '230 230 230',
-    '--color-primary-600': '240 240 240',
-    '--color-primary-700': '250 250 250',
-    '--color-primary-800': '253 253 253',
-    '--color-primary-900': '254 249 249',
-    '--color-primary-950': '253 252 252',
+    '--color-primary-0': '20 20 20',
+    '--color-primary-50': '25 25 25',
+    '--color-primary-100': '30 30 30',
+    '--color-primary-200': '35 35 35',
+    '--color-primary-400': '45 45 45',
+    '--color-primary-500': '50 50 50',
+    '--color-primary-600': '55 55 55',
+    '--color-primary-700': '60 60 60',
+    '--color-primary-800': '65 65 65',
+    '--color-primary-900': '70 70 70',
+    '--color-primary-950': '75 75 75',
 
     /* Secondary  */
     '--color-secondary-0': '20 20 20',
@@ -281,7 +280,7 @@ export const config = {
     '--color-outline-950': '253 254 254',
 
     /* Background */
-    '--color-background-0': '18 18 18',
+    '--color-background-0': '0 0 0',
     '--color-background-50': '39 38 37',
     '--color-background-100': '65 64 64',
     '--color-background-200': '83 82 82',
