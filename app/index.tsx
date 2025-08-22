@@ -71,8 +71,8 @@ const Timer = () => {
 
   return (
     <Box className="items-center mb-8">
-      <Box className="bg-background-template py-8 px-12 rounded-3xl mb-6">
-        <Text className="text-typography-white text-6xl font-mono font-bold">
+      <Box>
+        <Text className="text-typography-900 text-6xl font-mono font-bold">
           {formatTime(timeLeft)}
         </Text>
       </Box>
@@ -80,21 +80,27 @@ const Timer = () => {
       <Box className="flex-row gap-4">
         {!isRunning ? (
           <Button onPress={startTimer}>
-            <Text className="text-black font-medium text-lg">Start</Text>
+            <Text className="text-typography-900 font-medium text-lg">
+              Start
+            </Text>
           </Button>
         ) : (
           <>
             {isPaused ? (
               <Button onPress={startTimer}>
-                <Text className="text-black font-medium text-lg">Resume</Text>
+                <Text className="text-typography-900 font-medium text-lg">
+                  Resume
+                </Text>
               </Button>
             ) : (
               <Button onPress={pauseTimer}>
-                <Text className="text-black font-medium text-lg">Pause</Text>
+                <Text className="text-typography-900 font-medium text-lg">
+                  Pause
+                </Text>
               </Button>
             )}
             <Button onPress={resetTimer} variant="outline">
-              <Text className="text-typography-white font-medium text-lg">
+              <Text className="text-typography-900 font-medium text-lg">
                 Reset
               </Text>
             </Button>
@@ -110,41 +116,40 @@ export default function Home() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Box className="flex-1 bg-black h-[100vh]">
+      <Box className="flex-1 bg-background-0 h-[100vh]">
         <Box className="flex flex-1 items-center mx-5 lg:mx-32">
           <Box className="gap-3 flex-row md:self-start">
             <Button
               onPress={() => router.push('/stats')}
-              className="bg-background-template py-2 px-6 rounded-full"
+              className="px-5"
+              variant="link"
             >
-              <Icon as={InfoIcon} size="sm" className="text-typography-white" />
-              <Text className="text-typography-white font-medium">Stats</Text>
+              <Icon as={InfoIcon} size="sm" className="text-typography-900" />
+              <Text className="text-typography-900 font-medium">Stats</Text>
             </Button>
             <Button
               onPress={() => router.push('/schedule')}
-              className="bg-background-template py-2 px-6 rounded-full"
+              className="px-5"
+              variant="link"
             >
               <Icon
                 as={CalendarDaysIcon}
                 size="sm"
-                className="text-typography-white"
+                className="text-typography-900"
               />
-              <Text className="text-typography-white font-medium">
-                Schedule
-              </Text>
+              <Text className="text-typography-900 font-medium">Schedule</Text>
             </Button>
             <Button
               onPress={() => router.push('/settings')}
-              className="bg-background-template py-2 px-6 rounded-full"
+              className="px-5"
+              variant="link"
             >
               <Icon
                 as={SettingsIcon}
                 size="sm"
-                className="text-typography-white"
+                className="text-typography-900"
               />
-              <Text className="text-typography-white font-medium">
-                Settings
-              </Text>
+              <Text className="text-typography-900 font-medium">Settings</Text>
             </Button>
           </Box>
 
