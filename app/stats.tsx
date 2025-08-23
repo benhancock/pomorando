@@ -66,7 +66,10 @@ export default function Stats() {
                 <Text className="text-2xl font-bold text-typography-900 mb-2">
                   Total Sessions
                 </Text>
-                <Text className="text-6xl font-bold text-typography-600 mb-2">
+                <Text
+                  style={{ fontFamily: 'DepartureMono' }}
+                  className="text-4xl font-bold text-typography-600 mb-2"
+                >
                   {stats.totalSessions}
                 </Text>
                 <Text className="text-typography-600 text-sm">
@@ -74,11 +77,14 @@ export default function Stats() {
                 </Text>
               </Box>
 
-              <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
+              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
                 <Text className="text-2xl font-bold text-typography-900 mb-2">
                   Total Time Spent
                 </Text>
-                <Text className="text-4xl font-bold text-typography-600 mb-2">
+                <Text
+                  style={{ fontFamily: 'DepartureMono' }}
+                  className="text-4xl font-bold text-typography-600 mb-2"
+                >
                   {formatTime(stats.totalTimeSpent)}
                 </Text>
                 <Text className="text-typography-600 text-sm">
@@ -86,11 +92,14 @@ export default function Stats() {
                 </Text>
               </Box>
 
-              <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
+              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
                 <Text className="text-2xl font-bold text-typography-900 mb-2">
                   Current Streak
                 </Text>
-                <Text className="text-4xl font-bold text-typography-600 mb-2">
+                <Text
+                  style={{ fontFamily: 'DepartureMono' }}
+                  className="text-4xl font-bold text-typography-600 mb-2"
+                >
                   {stats.currentStreak}
                 </Text>
                 <Text className="text-typography-600 text-sm">
@@ -98,11 +107,14 @@ export default function Stats() {
                 </Text>
               </Box>
 
-              <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
+              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
                 <Text className="text-2xl font-bold text-typography-900 mb-2">
                   Daily Streak
                 </Text>
-                <Text className="text-4xl font-bold text-typography-600 mb-2">
+                <Text
+                  style={{ fontFamily: 'DepartureMono' }}
+                  className="text-4xl font-bold text-typography-600 mb-2"
+                >
                   {stats.dailyStreak}
                 </Text>
                 <Text className="text-typography-600 text-sm">
@@ -111,11 +123,14 @@ export default function Stats() {
               </Box>
 
               {stats.totalSessions > 0 && (
-                <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
+                <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
                   <Text className="text-2xl font-bold text-typography-900 mb-2">
                     Average Session
                   </Text>
-                  <Text className="text-4xl font-bold text-typography-600 mb-2">
+                  <Text
+                    style={{ fontFamily: 'DepartureMono' }}
+                    className="text-4xl font-bold text-typography-600 mb-2"
+                  >
                     {formatTime(
                       Math.round(stats.totalTimeSpent / stats.totalSessions)
                     )}
@@ -132,7 +147,7 @@ export default function Stats() {
                   action="negative"
                   size="lg"
                   onPress={handleResetStats}
-                  className="rounded-none"
+                  className="rounded-full"
                 >
                   <Text className="text-typography-900 font-medium">
                     Reset All Stats
@@ -165,7 +180,7 @@ export default function Stats() {
             <Button
               variant="outline"
               onPress={() => setShowResetConfirm(false)}
-              className="rounded-none mr-2"
+              className="rounded-full mr-2"
             >
               <Text className="text-typography-900 font-medium">Cancel</Text>
             </Button>
@@ -173,7 +188,7 @@ export default function Stats() {
               variant="solid"
               action="negative"
               onPress={confirmResetStats}
-              className="rounded-none"
+              className="rounded-full"
             >
               <Text className="text-typography-900 font-medium">Reset</Text>
             </Button>

@@ -14,7 +14,7 @@ import { PrimitiveIcon, UIIcon } from '@gluestack-ui/icon';
 const SCOPE = 'ALERT';
 
 const alertStyle = tva({
-  base: 'items-center py-3 px-4 rounded-none flex-row gap-2 border-outline-100',
+  base: 'items-center py-3 px-4 rounded-md flex-row gap-2 border-outline-100',
 
   variants: {
     action: {

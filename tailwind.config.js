@@ -170,12 +170,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        heading: "DepartureMono",
-        body: "DepartureMono",
-        mono: "DepartureMono",
+        heading: undefined,
+        body: undefined,
+        mono: undefined,
         roboto: ["Roboto", "sans-serif"],
-        sans: "DepartureMono",
-        default: "DepartureMono",
       },
       fontWeight: {
         extrablack: "950",

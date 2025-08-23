@@ -21,7 +21,7 @@ const tooltipStyle = tva({
 });
 
 const tooltipContentStyle = tva({
-  base: 'py-1 px-3 rounded-none bg-background-900 web:pointer-events-auto',
+  base: 'py-1 px-3 rounded-sm bg-background-900 web:pointer-events-auto',
 });
 
 const tooltipTextStyle = tva({

@@ -11,7 +11,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
         <Text className="text-center text-black/80">
           Open up the code for this screen:
         </Text>
-        <Box className="rounded-none px-1 my-2 bg-secondary-200">
+        <Box className="rounded-sm px-1 my-2 bg-secondary-200">
           <Text className="text-sm leading-5 text-center font-SpaceMono">
             {path}
           </Text>

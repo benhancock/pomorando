@@ -40,7 +40,7 @@ export default function Schedule() {
                   Reward Schedule
                 </Text>
               </Box>
-              <Box className="bg-background-50 rounded-none p-6 shadow-sm border border-border-200">
+              <Box className="bg-background-50 rounded-lg p-6 shadow-sm border border-border-200">
                 <Text className="text-typography-700">Loading...</Text>
               </Box>
             </Box>
@@ -87,7 +87,7 @@ export default function Schedule() {
               </Text>
             </Box>
 
-            <Box className="bg-background-0 rounded-none p-6 shadow-sm border border-border-200">
+            <Box className="bg-background-0 rounded-lg p-6 shadow-sm border border-border-200">
               <Text className="text-lg font-semibold text-typography-900 mb-4">
                 Reward Chance Settings
               </Text>
@@ -120,7 +120,7 @@ export default function Schedule() {
                 variant="solid"
                 action="primary"
                 onPress={() => handleRewardChanceChange(rewardChanceInput)}
-                className="rounded-none self-start"
+                className="rounded-full self-start"
               >
                 <Text className="text-typography-900 font-medium">Update</Text>
               </Button>

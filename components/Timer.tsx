@@ -106,7 +106,7 @@ export const Timer: React.FC = () => {
           }
           return prev - 1;
         });
-      }, 1000);
+      }, 0); //1000
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -122,64 +122,52 @@ export const Timer: React.FC = () => {
 
   return (
     <Box className="items-center">
-      <Box className="mt-8 mb-2">
+      <Box className="mt-20 mb-2">
         <Pressable
           onPress={showTimerLengthSelector}
           className="active:opacity-70"
         >
           <Box className="flex-row items-center">
-            <Box
-              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
-              style={{ backgroundColor: useThemeColor({}, 'background') }}
-            >
+            <Box className="w-16 h-30 rounded-xl items-center justify-center mx-0.5">
               <Text
                 style={{ fontFamily: 'DepartureMono' }}
-                className="text-typography-900 text-7xl font-bold text-center"
+                className="text-typography-900 text-8xl font-bold text-center"
               >
                 {formatTime(timeLeft).minutes[0]}
               </Text>
             </Box>
 
-            <Box
-              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
-              style={{ backgroundColor: useThemeColor({}, 'background') }}
-            >
+            <Box className="w-16 h-30 rounded-xl items-center justify-center mx-0.5">
               <Text
                 style={{ fontFamily: 'DepartureMono' }}
-                className="text-typography-900 text-7xl font-bold text-center"
+                className="text-typography-900 text-8xl font-bold text-center"
               >
                 {formatTime(timeLeft).minutes[1]}
               </Text>
             </Box>
 
-            <Box className="mx-1 pt-3">
+            <Box className="pb-7 -mx-4 mt-2">
               <Text
                 style={{ fontFamily: 'DepartureMono' }}
-                className="text-typography-900 text-7xl font-bold text-center"
+                className="text-typography-900 text-8xl font-bold text-center"
               >
                 :
               </Text>
             </Box>
 
-            <Box
-              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
-              style={{ backgroundColor: useThemeColor({}, 'background') }}
-            >
+            <Box className="w-16 h-30 rounded-xl items-center justify-center mx-0.5">
               <Text
                 style={{ fontFamily: 'DepartureMono' }}
-                className="text-typography-900 text-7xl font-bold text-center"
+                className="text-typography-900 text-8xl font-bold text-center"
               >
                 {formatTime(timeLeft).seconds[0]}
               </Text>
             </Box>
 
-            <Box
-              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
-              style={{ backgroundColor: useThemeColor({}, 'background') }}
-            >
+            <Box className="w-16 h-30 rounded-xl items-center justify-center mx-0.5">
               <Text
                 style={{ fontFamily: 'DepartureMono' }}
-                className="text-typography-900 text-7xl font-bold text-center"
+                className="text-typography-900 text-8xl font-bold text-center"
               >
                 {formatTime(timeLeft).seconds[1]}
               </Text>
@@ -194,20 +182,21 @@ export const Timer: React.FC = () => {
         onTimerLengthChange={handleTimerLengthChange}
       />
 
-      <Box className="mb-4">
+      {/* <Box className="mb-4">
         <Text className="text-typography-600 text-sm text-center">
           Reward chance: {getCurrentRewardChance(initialTime).toFixed(3)}%
         </Text>
-      </Box>
+      </Box> */}
 
-      <Box className="flex-row gap-4 items-center">
+      <Box className="flex-row gap-4 items-center mt-4">
         {isCompleted ? (
           <Button
             variant="solid"
             action="primary"
             size="lg"
             onPress={() => setShowCompletionModal(true)}
-            className="rounded-none active:scale-40"
+            className="rounded-full active:scale-40 border-2 border-primary-600"
+            style={{ backgroundColor: 'transparent' }}
           >
             <Text className="text-typography-900 font-medium text-lg">
               Claim Break
@@ -220,7 +209,8 @@ export const Timer: React.FC = () => {
               action="primary"
               size="lg"
               onPress={startTimer}
-              className="rounded-none active:scale-40"
+              className="rounded-full active:scale-40 border-2 border-primary-600"
+              style={{ backgroundColor: 'transparent' }}
             >
               <Text className="text-typography-900 font-medium text-lg">
                 Start
@@ -239,7 +229,8 @@ export const Timer: React.FC = () => {
                 action="primary"
                 size="lg"
                 onPress={startTimer}
-                className="rounded-none active:bg-primary-300"
+                className="rounded-full active:bg-primary-300 border-2 border-primary-600"
+                style={{ backgroundColor: 'transparent' }}
               >
                 <Text className="text-typography-900 font-medium text-lg">
                   Resume
@@ -251,7 +242,8 @@ export const Timer: React.FC = () => {
                 action="primary"
                 size="lg"
                 onPress={pauseTimer}
-                className="rounded-none"
+                className="rounded-full border-2 border-primary-600"
+                style={{ backgroundColor: 'transparent' }}
               >
                 <Text className="text-typography-900 font-medium text-lg">
                   Pause
@@ -263,7 +255,8 @@ export const Timer: React.FC = () => {
               action="primary"
               size="lg"
               onPress={resetTimer}
-              className="rounded-none"
+              className="rounded-full border-2 border-primary-600"
+              style={{ backgroundColor: 'transparent' }}
             >
               <Text className="text-typography-900 font-medium text-lg">
                 Reset

@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set default font family */
-@layer base {
-  * {
-    font-family: 'DepartureMono', monospace;
-  }
-}
-
 /* Custom animations for glowing border effect */
 @keyframes glow-pulse {
   0%, 100% {
