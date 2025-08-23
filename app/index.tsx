@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { InfoIcon, CalendarDaysIcon, SettingsIcon } from '@/components/ui/icon';
 import { usePomodoroStats } from '../contexts/PomodoroContext';
+import { DEFAULT_REWARD_CHANCE } from '../constants/Constants';
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -37,7 +38,7 @@ const Timer = () => {
   const [showRewardDialog, setShowRewardDialog] = useState(false);
   const [hasReward, setHasReward] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { addCompletedSession } = usePomodoroStats();
+  const { addCompletedSession, stats } = usePomodoroStats();
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -92,7 +93,8 @@ const Timer = () => {
 
   const handleClaimBreak = () => {
     const random = Math.random();
-    const gotReward = random < 0.99;
+    const rewardChance = (stats?.rewardChance || DEFAULT_REWARD_CHANCE) / 100;
+    const gotReward = random < rewardChance;
     setHasReward(gotReward);
     setShowCompletionModal(false);
     setShowRewardDialog(true);

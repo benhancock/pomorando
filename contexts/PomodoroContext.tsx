@@ -1,15 +1,18 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEFAULT_REWARD_CHANCE } from '../constants/Constants';
 
 interface PomodoroStats {
   totalSessions: number;
   totalTimeSpent: number;
+  rewardChance: number;
 }
 
 interface PomodoroContextType {
   stats: PomodoroStats;
   addCompletedSession: (durationInSeconds: number) => void;
   resetStats: () => void;
+  updateRewardChance: (chance: number) => void;
 }
 
 const PomodoroContext = createContext<PomodoroContextType | undefined>(
@@ -30,6 +33,7 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
   const [stats, setStats] = useState<PomodoroStats>({
     totalSessions: 0,
     totalTimeSpent: 0,
+    rewardChance: DEFAULT_REWARD_CHANCE,
   });
 
   useEffect(() => {
@@ -40,7 +44,11 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const savedStats = await AsyncStorage.getItem('pomodoroStats');
       if (savedStats) {
-        setStats(JSON.parse(savedStats));
+        const parsedStats = JSON.parse(savedStats);
+        if (parsedStats.rewardChance === undefined) {
+          parsedStats.rewardChance = DEFAULT_REWARD_CHANCE;
+        }
+        setStats(parsedStats);
       }
     } catch (error) {
       console.error('Error loading pomodoro stats:', error);
@@ -59,6 +67,7 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
     const newStats = {
       totalSessions: stats.totalSessions + 1,
       totalTimeSpent: stats.totalTimeSpent + durationInSeconds,
+      rewardChance: stats.rewardChance,
     };
     setStats(newStats);
     saveStats(newStats);
@@ -68,6 +77,16 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
     const newStats = {
       totalSessions: 0,
       totalTimeSpent: 0,
+      rewardChance: DEFAULT_REWARD_CHANCE,
+    };
+    setStats(newStats);
+    saveStats(newStats);
+  };
+
+  const updateRewardChance = (chance: number) => {
+    const newStats = {
+      ...stats,
+      rewardChance: chance,
     };
     setStats(newStats);
     saveStats(newStats);
@@ -75,7 +94,7 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <PomodoroContext.Provider
-      value={{ stats, addCompletedSession, resetStats }}
+      value={{ stats, addCompletedSession, resetStats, updateRewardChance }}
     >
       {children}
     </PomodoroContext.Provider>
