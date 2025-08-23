@@ -8,6 +8,7 @@ import { TimerLengthSelector } from './TimerLengthSelector';
 import { CompletionModal } from './CompletionModal';
 import { RewardDialog } from './RewardDialog';
 import { AchievementChips } from './AchievementChips';
+import { useThemeColor } from '../hooks/useThemeColor';
 
 export const Timer: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(25 * 60);
@@ -30,7 +31,10 @@ export const Timer: React.FC = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return {
+      minutes: mins.toString().padStart(2, '0'),
+      seconds: secs.toString().padStart(2, '0'),
+    };
   };
 
   const startTimer = () => {
@@ -123,9 +127,49 @@ export const Timer: React.FC = () => {
           onPress={showTimerLengthSelector}
           className="active:opacity-70"
         >
-          <Text className="text-typography-900 text-8xl font-mono font-bold">
-            {formatTime(timeLeft)}
-          </Text>
+          <Box className="flex-row items-center">
+            <Box
+              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              style={{ backgroundColor: useThemeColor({}, 'background') }}
+            >
+              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+                {formatTime(timeLeft).minutes[0]}
+              </Text>
+            </Box>
+
+            <Box
+              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              style={{ backgroundColor: useThemeColor({}, 'background') }}
+            >
+              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+                {formatTime(timeLeft).minutes[1]}
+              </Text>
+            </Box>
+
+            <Box className="mx-1 pt-3">
+              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+                :
+              </Text>
+            </Box>
+
+            <Box
+              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              style={{ backgroundColor: useThemeColor({}, 'background') }}
+            >
+              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+                {formatTime(timeLeft).seconds[0]}
+              </Text>
+            </Box>
+
+            <Box
+              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              style={{ backgroundColor: useThemeColor({}, 'background') }}
+            >
+              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+                {formatTime(timeLeft).seconds[1]}
+              </Text>
+            </Box>
+          </Box>
         </Pressable>
       </Box>
 
