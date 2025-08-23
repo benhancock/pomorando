@@ -104,7 +104,7 @@ export const Timer: React.FC = () => {
             setShowCompletionModal(true);
             return 0;
           }
-          return prev - 1;
+          return prev - 100; //1
         });
       }, 0); //1000
     } else {
