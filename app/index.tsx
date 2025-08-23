@@ -7,6 +7,7 @@ import { Icon } from '@/components/ui/icon';
 import { InfoIcon, CalendarDaysIcon, SettingsIcon } from '@/components/ui/icon';
 import { usePomodoroStats } from '../contexts/PomodoroContext';
 import { DEFAULT_REWARD_CHANCE } from '../constants/Constants';
+import { AchievementChips } from '../components/AchievementChips';
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -28,8 +29,8 @@ import {
 } from '@/components/ui/actionsheet';
 
 const Timer = () => {
-  const [timeLeft, setTimeLeft] = useState(0.05 * 60);
-  const [initialTime, setInitialTime] = useState(0.05 * 60);
+  const [timeLeft, setTimeLeft] = useState(25 * 60);
+  const [initialTime, setInitialTime] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -38,7 +39,13 @@ const Timer = () => {
   const [showRewardDialog, setShowRewardDialog] = useState(false);
   const [hasReward, setHasReward] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { addCompletedSession, stats } = usePomodoroStats();
+  const {
+    addCompletedSession,
+    stats,
+    getActiveAchievements,
+    getActiveAchievementsForSession,
+    getCurrentRewardChance,
+  } = usePomodoroStats();
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -66,8 +73,8 @@ const Timer = () => {
     setIsRunning(false);
     setIsPaused(false);
     setIsCompleted(false);
-    setTimeLeft(0.05 * 60);
-    setInitialTime(0.05 * 60);
+    setTimeLeft(25 * 60);
+    setInitialTime(25 * 60);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -93,7 +100,8 @@ const Timer = () => {
 
   const handleClaimBreak = () => {
     const random = Math.random();
-    const rewardChance = (stats?.rewardChance || DEFAULT_REWARD_CHANCE) / 100;
+    const currentRewardChance = getCurrentRewardChance(initialTime);
+    const rewardChance = currentRewardChance / 100;
     const gotReward = random < rewardChance;
     setHasReward(gotReward);
     setShowCompletionModal(false);
@@ -114,7 +122,7 @@ const Timer = () => {
           }
           return prev - 1;
         });
-      }, 1000);
+      }, 1);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -130,7 +138,7 @@ const Timer = () => {
 
   return (
     <Box className="items-center">
-      <Box className="mt-20 mb-2">
+      <Box className="mt-8 mb-2">
         <Pressable
           onPress={showTimerLengthSelector}
           className="active:opacity-70"
@@ -172,7 +180,13 @@ const Timer = () => {
         </ActionsheetContent>
       </Actionsheet>
 
-      <Box className="flex-row gap-4">
+      <Box className="mb-4">
+        <Text className="text-typography-600 text-sm text-center">
+          Reward chance: {getCurrentRewardChance(initialTime).toFixed(3)}%
+        </Text>
+      </Box>
+
+      <Box className="flex-row gap-4 items-center">
         {isCompleted ? (
           <Button
             variant="solid"
@@ -186,17 +200,23 @@ const Timer = () => {
             </Text>
           </Button>
         ) : !isRunning ? (
-          <Button
-            variant="solid"
-            action="primary"
-            size="lg"
-            onPress={startTimer}
-            className="rounded-full active:scale-40"
-          >
-            <Text className="text-typography-900 font-medium text-lg">
-              Start
-            </Text>
-          </Button>
+          <>
+            <Button
+              variant="solid"
+              action="primary"
+              size="lg"
+              onPress={startTimer}
+              className="rounded-full active:scale-40"
+            >
+              <Text className="text-typography-900 font-medium text-lg">
+                Start
+              </Text>
+            </Button>
+            <AchievementChips
+              achievements={getActiveAchievementsForSession(initialTime)}
+              currentRewardChance={getCurrentRewardChance(initialTime)}
+            />
+          </>
         ) : (
           <>
             {isPaused ? (

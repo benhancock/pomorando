@@ -24,3 +24,12 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
 };
+
+// Achievement chip colors
+export const AchievementColors = {
+  highPositive: '#8B5CF6', // Purple
+  mediumPositive: '#3B82F6', // Blue
+  lowPositive: '#10B981', // Green
+  lowNegative: '#F59E0B', // Yellow
+  highNegative: '#EF4444', // Red
+};

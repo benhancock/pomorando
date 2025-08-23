@@ -86,6 +86,30 @@ export default function Stats() {
                 </Text>
               </Box>
 
+              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+                <Text className="text-2xl font-bold text-typography-900 mb-2">
+                  Current Streak
+                </Text>
+                <Text className="text-4xl font-bold text-typography-600 mb-2">
+                  {stats.currentStreak}
+                </Text>
+                <Text className="text-typography-600 text-sm">
+                  Pomodoros completed in a row
+                </Text>
+              </Box>
+
+              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+                <Text className="text-2xl font-bold text-typography-900 mb-2">
+                  Daily Streak
+                </Text>
+                <Text className="text-4xl font-bold text-typography-600 mb-2">
+                  {stats.dailyStreak}
+                </Text>
+                <Text className="text-typography-600 text-sm">
+                  Days in a row with pomodoros
+                </Text>
+              </Box>
+
               {stats.totalSessions > 0 && (
                 <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
                   <Text className="text-2xl font-bold text-typography-900 mb-2">
