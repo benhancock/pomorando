@@ -5,6 +5,7 @@ import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { InfoIcon, CalendarDaysIcon, SettingsIcon } from '@/components/ui/icon';
+import { usePomodoroStats } from '../contexts/PomodoroContext';
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -27,6 +28,7 @@ import {
 
 const Timer = () => {
   const [timeLeft, setTimeLeft] = useState(0.05 * 60);
+  const [initialTime, setInitialTime] = useState(0.05 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -35,6 +37,7 @@ const Timer = () => {
   const [showRewardDialog, setShowRewardDialog] = useState(false);
   const [hasReward, setHasReward] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { addCompletedSession } = usePomodoroStats();
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -63,6 +66,7 @@ const Timer = () => {
     setIsPaused(false);
     setIsCompleted(false);
     setTimeLeft(0.05 * 60);
+    setInitialTime(0.05 * 60);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -74,7 +78,9 @@ const Timer = () => {
 
   const handleTimerLengthChange = (value: string) => {
     const minutes = parseInt(value);
-    setTimeLeft(minutes * 60);
+    const seconds = minutes * 60;
+    setTimeLeft(seconds);
+    setInitialTime(seconds);
     setShowTimerSelector(false);
     setIsRunning(false);
     setIsPaused(false);
@@ -86,10 +92,11 @@ const Timer = () => {
 
   const handleClaimBreak = () => {
     const random = Math.random();
-    const gotReward = random < 0.3;
+    const gotReward = random < 0.99;
     setHasReward(gotReward);
     setShowCompletionModal(false);
     setShowRewardDialog(true);
+    addCompletedSession(initialTime);
   };
 
   useEffect(() => {
@@ -305,6 +312,7 @@ const Timer = () => {
                 setShowRewardDialog(false);
                 setIsCompleted(false);
                 setTimeLeft(0.05 * 60);
+                setInitialTime(0.05 * 60);
               }}
               className="rounded-full"
             >

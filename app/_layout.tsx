@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { useColorScheme } from '@/components/useColorScheme';
 import { Stack } from 'expo-router';
+import { PomodoroProvider } from '../contexts/PomodoroContext';
 
 import '../global.css';
 
@@ -47,19 +48,21 @@ function RootLayoutNav() {
   return (
     <GluestackUIProvider mode={colorScheme === 'dark' ? 'dark' : 'light'}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack
-          screenOptions={{
-            headerShown: false, // Hide the default header
-            animation: 'slide_from_right', // Add slide animation
-            gestureEnabled: true, // Enable swipe back gesture on iOS
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="stats" />
-          <Stack.Screen name="schedule" />
-          <Stack.Screen name="settings" />
-          <Stack.Screen name="modal" />
-        </Stack>
+        <PomodoroProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false, // Hide the default header
+              animation: 'slide_from_right', // Add slide animation
+              gestureEnabled: true, // Enable swipe back gesture on iOS
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="stats" />
+            <Stack.Screen name="schedule" />
+            <Stack.Screen name="settings" />
+            <Stack.Screen name="modal" />
+          </Stack>
+        </PomodoroProvider>
       </ThemeProvider>
     </GluestackUIProvider>
   );
