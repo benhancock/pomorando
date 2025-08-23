@@ -74,7 +74,7 @@ export default function Stats() {
                 </Text>
               </Box>
 
-              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+              <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
                 <Text className="text-2xl font-bold text-typography-900 mb-2">
                   Total Time Spent
                 </Text>
@@ -86,7 +86,7 @@ export default function Stats() {
                 </Text>
               </Box>
 
-              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+              <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
                 <Text className="text-2xl font-bold text-typography-900 mb-2">
                   Current Streak
                 </Text>
@@ -98,7 +98,7 @@ export default function Stats() {
                 </Text>
               </Box>
 
-              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+              <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
                 <Text className="text-2xl font-bold text-typography-900 mb-2">
                   Daily Streak
                 </Text>
@@ -111,7 +111,7 @@ export default function Stats() {
               </Box>
 
               {stats.totalSessions > 0 && (
-                <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+                <Box className="bg-background-50 dark:bg-background-0 rounded-none p-6">
                   <Text className="text-2xl font-bold text-typography-900 mb-2">
                     Average Session
                   </Text>
@@ -132,7 +132,7 @@ export default function Stats() {
                   action="negative"
                   size="lg"
                   onPress={handleResetStats}
-                  className="rounded-full"
+                  className="rounded-none"
                 >
                   <Text className="text-typography-900 font-medium">
                     Reset All Stats
@@ -165,7 +165,7 @@ export default function Stats() {
             <Button
               variant="outline"
               onPress={() => setShowResetConfirm(false)}
-              className="rounded-full mr-2"
+              className="rounded-none mr-2"
             >
               <Text className="text-typography-900 font-medium">Cancel</Text>
             </Button>
@@ -173,7 +173,7 @@ export default function Stats() {
               variant="solid"
               action="negative"
               onPress={confirmResetStats}
-              className="rounded-full"
+              className="rounded-none"
             >
               <Text className="text-typography-900 font-medium">Reset</Text>
             </Button>

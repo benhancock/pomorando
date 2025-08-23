@@ -67,7 +67,7 @@ export const RewardDialog: React.FC<RewardDialogProps> = ({
             variant="solid"
             action="primary"
             onPress={onComplete}
-            className="rounded-full"
+            className="rounded-none"
           >
             <Text className="text-typography-900 font-medium">Got it!</Text>
           </Button>

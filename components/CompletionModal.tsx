@@ -37,7 +37,7 @@ export const CompletionModal: React.FC<CompletionModalProps> = ({
             variant="solid"
             action="primary"
             onPress={onClaimBreak}
-            className="rounded-full"
+            className="rounded-none"
           >
             <Text className="text-typography-900 font-medium">Claim Break</Text>
           </Button>

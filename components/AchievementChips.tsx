@@ -80,7 +80,7 @@ export const AchievementChips: React.FC<AchievementChipsProps> = ({
     <>
       <Pressable onPress={handleChipPress}>
         <Box
-          className={`w-10 h-10 rounded-full items-center justify-center ${status.baseColor}`}
+          className={`w-10 h-10 rounded-none items-center justify-center ${status.baseColor}`}
         >
           <Text className="text-white text-lg font-bold">{status.count}</Text>
         </Box>
@@ -96,13 +96,13 @@ export const AchievementChips: React.FC<AchievementChipsProps> = ({
           className="flex-1 bg-black bg-opacity-50 justify-center items-center"
           onPress={() => setShowModal(false)}
         >
-          <Pressable className="bg-white rounded-lg p-4 mx-4 max-w-96">
+          <Pressable className="bg-white rounded-none p-4 mx-4 max-w-96">
             <Box>
               <Text className="text-xl font-bold text-gray-800 mb-4 text-center">
                 Active Achievements
               </Text>
 
-              <Box className="mb-4 p-3 bg-blue-50 rounded-lg">
+              <Box className="mb-4 p-3 bg-blue-50 rounded-none">
                 <Text className="text-sm font-medium text-blue-800 text-center">
                   Current Reward Chance: {Math.round(currentRewardChance)}%
                 </Text>
@@ -113,7 +113,7 @@ export const AchievementChips: React.FC<AchievementChipsProps> = ({
                   {achievements.map(achievement => (
                     <Box
                       key={achievement.id}
-                      className="mb-3 p-3 bg-gray-50 rounded-lg"
+                      className="mb-3 p-3 bg-gray-50 rounded-none"
                     >
                       <Box className="flex-row items-center mb-2">
                         <Text className="text-2xl mr-3">
@@ -123,7 +123,7 @@ export const AchievementChips: React.FC<AchievementChipsProps> = ({
                           {achievement.name}
                         </Text>
                         <Box
-                          className={`px-2 py-1 rounded-full ${getChipColor(achievement.rewardMultiplier)}`}
+                          className={`px-2 py-1 rounded-none ${getChipColor(achievement.rewardMultiplier)}`}
                         >
                           <Text className="text-white text-xs font-medium">
                             {formatMultiplier(achievement.rewardMultiplier)}
@@ -137,7 +137,7 @@ export const AchievementChips: React.FC<AchievementChipsProps> = ({
                   ))}
                 </Box>
               ) : (
-                <Box className="p-4 bg-gray-50 rounded-lg">
+                <Box className="p-4 bg-gray-50 rounded-none">
                   <Text className="text-gray-500 text-center">
                     No active achievements yet. Complete more pomodoros to
                     unlock achievements!

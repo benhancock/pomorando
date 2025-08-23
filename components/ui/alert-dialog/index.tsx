@@ -48,7 +48,7 @@ const alertDialogStyle = tva({
 });
 
 const alertDialogContentStyle = tva({
-  base: 'bg-background-0 rounded-lg overflow-hidden border border-outline-100 p-6',
+  base: 'bg-background-0 rounded-none overflow-hidden border border-outline-100 p-6',
   parentVariants: {
     size: {
       xs: 'w-[60%] max-w-[360px]',
@@ -61,7 +61,7 @@ const alertDialogContentStyle = tva({
 });
 
 const alertDialogCloseButtonStyle = tva({
-  base: 'group/alert-dialog-close-button z-10 rounded-sm p-2 data-[focus-visible=true]:bg-background-100 web:cursor-pointer outline-0',
+  base: 'group/alert-dialog-close-button z-10 rounded-none p-2 data-[focus-visible=true]:bg-background-100 web:cursor-pointer outline-0',
 });
 
 const alertDialogHeaderStyle = tva({

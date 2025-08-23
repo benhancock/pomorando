@@ -129,43 +129,58 @@ export const Timer: React.FC = () => {
         >
           <Box className="flex-row items-center">
             <Box
-              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
               style={{ backgroundColor: useThemeColor({}, 'background') }}
             >
-              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+              <Text
+                style={{ fontFamily: 'DepartureMono' }}
+                className="text-typography-900 text-7xl font-bold text-center"
+              >
                 {formatTime(timeLeft).minutes[0]}
               </Text>
             </Box>
 
             <Box
-              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
               style={{ backgroundColor: useThemeColor({}, 'background') }}
             >
-              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+              <Text
+                style={{ fontFamily: 'DepartureMono' }}
+                className="text-typography-900 text-7xl font-bold text-center"
+              >
                 {formatTime(timeLeft).minutes[1]}
               </Text>
             </Box>
 
             <Box className="mx-1 pt-3">
-              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+              <Text
+                style={{ fontFamily: 'DepartureMono' }}
+                className="text-typography-900 text-7xl font-bold text-center"
+              >
                 :
               </Text>
             </Box>
 
             <Box
-              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
               style={{ backgroundColor: useThemeColor({}, 'background') }}
             >
-              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+              <Text
+                style={{ fontFamily: 'DepartureMono' }}
+                className="text-typography-900 text-7xl font-bold text-center"
+              >
                 {formatTime(timeLeft).seconds[0]}
               </Text>
             </Box>
 
             <Box
-              className="w-12 h-28 rounded-lg items-center justify-center mx-0.5 pt-3"
+              className="w-12 h-28 rounded-none items-center justify-center mx-0.5 pt-3"
               style={{ backgroundColor: useThemeColor({}, 'background') }}
             >
-              <Text className="text-typography-900 text-7xl font-mono font-bold text-center">
+              <Text
+                style={{ fontFamily: 'DepartureMono' }}
+                className="text-typography-900 text-7xl font-bold text-center"
+              >
                 {formatTime(timeLeft).seconds[1]}
               </Text>
             </Box>
@@ -192,7 +207,7 @@ export const Timer: React.FC = () => {
             action="primary"
             size="lg"
             onPress={() => setShowCompletionModal(true)}
-            className="rounded-full active:scale-40"
+            className="rounded-none active:scale-40"
           >
             <Text className="text-typography-900 font-medium text-lg">
               Claim Break
@@ -205,7 +220,7 @@ export const Timer: React.FC = () => {
               action="primary"
               size="lg"
               onPress={startTimer}
-              className="rounded-full active:scale-40"
+              className="rounded-none active:scale-40"
             >
               <Text className="text-typography-900 font-medium text-lg">
                 Start
@@ -224,7 +239,7 @@ export const Timer: React.FC = () => {
                 action="primary"
                 size="lg"
                 onPress={startTimer}
-                className="rounded-full active:bg-primary-300"
+                className="rounded-none active:bg-primary-300"
               >
                 <Text className="text-typography-900 font-medium text-lg">
                   Resume
@@ -236,7 +251,7 @@ export const Timer: React.FC = () => {
                 action="primary"
                 size="lg"
                 onPress={pauseTimer}
-                className="rounded-full"
+                className="rounded-none"
               >
                 <Text className="text-typography-900 font-medium text-lg">
                   Pause
@@ -248,7 +263,7 @@ export const Timer: React.FC = () => {
               action="primary"
               size="lg"
               onPress={resetTimer}
-              className="rounded-full"
+              className="rounded-none"
             >
               <Text className="text-typography-900 font-medium text-lg">
                 Reset
