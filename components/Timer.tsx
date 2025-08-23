@@ -1,0 +1,236 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Box } from '@/components/ui/box';
+import { Text } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
+import { Pressable } from 'react-native';
+import { usePomodoroStats } from '../contexts/PomodoroContext';
+import { TimerLengthSelector } from './TimerLengthSelector';
+import { CompletionModal } from './CompletionModal';
+import { RewardDialog } from './RewardDialog';
+import { AchievementChips } from './AchievementChips';
+
+export const Timer: React.FC = () => {
+  const [timeLeft, setTimeLeft] = useState(25 * 60);
+  const [initialTime, setInitialTime] = useState(25 * 60);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [showTimerSelector, setShowTimerSelector] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [showRewardDialog, setShowRewardDialog] = useState(false);
+  const [hasReward, setHasReward] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const {
+    addCompletedSession,
+    getActiveAchievementsForSession,
+    getCurrentRewardChance,
+  } = usePomodoroStats();
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const startTimer = () => {
+    if (!isRunning) {
+      setIsRunning(true);
+      setIsPaused(false);
+      setIsCompleted(false);
+    } else if (isPaused) {
+      setIsPaused(false);
+    }
+  };
+
+  const pauseTimer = () => {
+    if (isRunning && !isPaused) {
+      setIsPaused(true);
+    }
+  };
+
+  const resetTimer = () => {
+    setIsRunning(false);
+    setIsPaused(false);
+    setIsCompleted(false);
+    setTimeLeft(25 * 60);
+    setInitialTime(25 * 60);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  const showTimerLengthSelector = () => {
+    setShowTimerSelector(true);
+  };
+
+  const handleTimerLengthChange = (value: string) => {
+    const minutes = parseInt(value);
+    const seconds = minutes * 60;
+    setTimeLeft(seconds);
+    setInitialTime(seconds);
+    setShowTimerSelector(false);
+    setIsRunning(false);
+    setIsPaused(false);
+    setIsCompleted(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  const handleClaimBreak = () => {
+    const random = Math.random();
+    const currentRewardChance = getCurrentRewardChance(initialTime);
+    const rewardChance = currentRewardChance / 100;
+    const gotReward = random < rewardChance;
+    setHasReward(gotReward);
+    setShowCompletionModal(false);
+    setShowRewardDialog(true);
+    addCompletedSession(initialTime);
+  };
+
+  useEffect(() => {
+    if (isRunning && !isPaused) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            setIsRunning(false);
+            setIsPaused(false);
+            setIsCompleted(true);
+            setShowCompletionModal(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isRunning, isPaused]);
+
+  return (
+    <Box className="items-center">
+      <Box className="mt-8 mb-2">
+        <Pressable
+          onPress={showTimerLengthSelector}
+          className="active:opacity-70"
+        >
+          <Text className="text-typography-900 text-8xl font-mono font-bold">
+            {formatTime(timeLeft)}
+          </Text>
+        </Pressable>
+      </Box>
+
+      <TimerLengthSelector
+        isOpen={showTimerSelector}
+        onClose={() => setShowTimerSelector(false)}
+        onTimerLengthChange={handleTimerLengthChange}
+      />
+
+      <Box className="mb-4">
+        <Text className="text-typography-600 text-sm text-center">
+          Reward chance: {getCurrentRewardChance(initialTime).toFixed(3)}%
+        </Text>
+      </Box>
+
+      <Box className="flex-row gap-4 items-center">
+        {isCompleted ? (
+          <Button
+            variant="solid"
+            action="primary"
+            size="lg"
+            onPress={() => setShowCompletionModal(true)}
+            className="rounded-full active:scale-40"
+          >
+            <Text className="text-typography-900 font-medium text-lg">
+              Claim Break
+            </Text>
+          </Button>
+        ) : !isRunning ? (
+          <>
+            <Button
+              variant="solid"
+              action="primary"
+              size="lg"
+              onPress={startTimer}
+              className="rounded-full active:scale-40"
+            >
+              <Text className="text-typography-900 font-medium text-lg">
+                Start
+              </Text>
+            </Button>
+            <AchievementChips
+              achievements={getActiveAchievementsForSession(initialTime)}
+              currentRewardChance={getCurrentRewardChance(initialTime)}
+            />
+          </>
+        ) : (
+          <>
+            {isPaused ? (
+              <Button
+                variant="solid"
+                action="primary"
+                size="lg"
+                onPress={startTimer}
+                className="rounded-full active:bg-primary-300"
+              >
+                <Text className="text-typography-900 font-medium text-lg">
+                  Resume
+                </Text>
+              </Button>
+            ) : (
+              <Button
+                variant="solid"
+                action="primary"
+                size="lg"
+                onPress={pauseTimer}
+                className="rounded-full"
+              >
+                <Text className="text-typography-900 font-medium text-lg">
+                  Pause
+                </Text>
+              </Button>
+            )}
+            <Button
+              variant="solid"
+              action="primary"
+              size="lg"
+              onPress={resetTimer}
+              className="rounded-full"
+            >
+              <Text className="text-typography-900 font-medium text-lg">
+                Reset
+              </Text>
+            </Button>
+          </>
+        )}
+      </Box>
+
+      <CompletionModal
+        isOpen={showCompletionModal}
+        onClose={() => setShowCompletionModal(false)}
+        onClaimBreak={handleClaimBreak}
+      />
+
+      <RewardDialog
+        isOpen={showRewardDialog}
+        onClose={() => setShowRewardDialog(false)}
+        hasReward={hasReward}
+        onComplete={() => {
+          setShowRewardDialog(false);
+          setIsCompleted(false);
+          setTimeLeft(25 * 60);
+          setInitialTime(25 * 60);
+        }}
+      />
+    </Box>
+  );
+};
