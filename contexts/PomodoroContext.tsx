@@ -16,6 +16,8 @@ interface PomodoroStats {
   lastSessionDate: string;
   lastSessionLength: number;
   consumedAchievements: string[];
+  totalSkipClaims: number; // Total number of skip claims made
+  skipClaimModifier: number; // Bonus reward chance for next session after skipping
 }
 
 interface PomodoroContextType {
@@ -26,6 +28,7 @@ interface PomodoroContextType {
   getActiveAchievements: () => any[];
   getActiveAchievementsForSession: (currentSessionLength: number) => any[];
   getCurrentRewardChance: (sessionLength: number) => number;
+  skipClaim: () => void; // Skip current claim and get bonus for next session
 }
 
 const PomodoroContext = createContext<PomodoroContextType | undefined>(
@@ -52,6 +55,8 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
     lastSessionDate: '',
     lastSessionLength: DEFAULT_POMODORO_LENGTH,
     consumedAchievements: [],
+    totalSkipClaims: 0,
+    skipClaimModifier: 0,
   });
 
   useEffect(() => {
@@ -73,6 +78,8 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
           lastSessionLength:
             parsedStats.lastSessionLength || DEFAULT_POMODORO_LENGTH,
           consumedAchievements: parsedStats.consumedAchievements || [],
+          totalSkipClaims: parsedStats.totalSkipClaims || 0,
+          skipClaimModifier: parsedStats.skipClaimModifier || 0,
         };
         setStats(enhancedStats);
       }
@@ -156,6 +163,8 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
       lastSessionDate: today,
       lastSessionLength: durationInSeconds,
       consumedAchievements: newConsumedAchievements,
+      totalSkipClaims: stats.totalSkipClaims,
+      skipClaimModifier: 0, // Reset modifier after each session
     };
     setStats(newStats);
     saveStats(newStats);
@@ -171,6 +180,8 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
       lastSessionDate: '',
       lastSessionLength: DEFAULT_POMODORO_LENGTH,
       consumedAchievements: [],
+      totalSkipClaims: 0,
+      skipClaimModifier: 0,
     };
     setStats(newStats);
     saveStats(newStats);
@@ -207,11 +218,25 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getCurrentRewardChance = (sessionLength: number) => {
     const activeAchievements = getActiveAchievementsForSession(sessionLength);
-    return calculateBalancedRewardChance(
+    const baseChance = calculateBalancedRewardChance(
       stats.rewardChance,
       sessionLength,
       activeAchievements
     );
+
+    const modifierMultiplier = Math.pow(1.1, stats.skipClaimModifier);
+    const finalChance = baseChance * modifierMultiplier;
+    return Math.min(finalChance, 100);
+  };
+
+  const skipClaim = () => {
+    const newStats = {
+      ...stats,
+      totalSkipClaims: stats.totalSkipClaims + 1,
+      skipClaimModifier: stats.skipClaimModifier + 1,
+    };
+    setStats(newStats);
+    saveStats(newStats);
   };
 
   return (
@@ -224,6 +249,7 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
         getActiveAchievements: getActiveAchievementsList,
         getActiveAchievementsForSession,
         getCurrentRewardChance,
+        skipClaim,
       }}
     >
       {children}

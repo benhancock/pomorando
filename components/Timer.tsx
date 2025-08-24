@@ -26,6 +26,8 @@ export const Timer: React.FC = () => {
     addCompletedSession,
     getActiveAchievementsForSession,
     getCurrentRewardChance,
+    skipClaim,
+    stats,
   } = usePomodoroStats();
 
   const formatTime = (seconds: number) => {
@@ -91,6 +93,14 @@ export const Timer: React.FC = () => {
     setShowCompletionModal(false);
     setShowRewardDialog(true);
     addCompletedSession(initialTime);
+  };
+
+  const handleSkipClaim = () => {
+    skipClaim();
+    setShowCompletionModal(false);
+    setIsCompleted(false);
+    setTimeLeft(25 * 60);
+    setInitialTime(25 * 60);
   };
 
   useEffect(() => {
@@ -182,12 +192,6 @@ export const Timer: React.FC = () => {
         onTimerLengthChange={handleTimerLengthChange}
       />
 
-      {/* <Box className="mb-4">
-        <Text className="text-typography-600 text-sm text-center">
-          Reward chance: {getCurrentRewardChance(initialTime).toFixed(3)}%
-        </Text>
-      </Box> */}
-
       <Box className="flex-row gap-4 items-center mt-4">
         {isCompleted ? (
           <Button
@@ -219,6 +223,7 @@ export const Timer: React.FC = () => {
             <AchievementChips
               achievements={getActiveAchievementsForSession(initialTime)}
               currentRewardChance={getCurrentRewardChance(initialTime)}
+              skipClaimModifier={stats.skipClaimModifier}
             />
           </>
         ) : (
@@ -262,6 +267,11 @@ export const Timer: React.FC = () => {
                 Reset
               </Text>
             </Button>
+            <AchievementChips
+              achievements={getActiveAchievementsForSession(initialTime)}
+              currentRewardChance={getCurrentRewardChance(initialTime)}
+              skipClaimModifier={stats.skipClaimModifier}
+            />
           </>
         )}
       </Box>
@@ -270,6 +280,9 @@ export const Timer: React.FC = () => {
         isOpen={showCompletionModal}
         onClose={() => setShowCompletionModal(false)}
         onClaimBreak={handleClaimBreak}
+        onSkipClaim={handleSkipClaim}
+        skipClaimModifier={stats.skipClaimModifier}
+        totalSkipClaims={stats.totalSkipClaims}
       />
 
       <RewardDialog

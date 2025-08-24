@@ -17,7 +17,7 @@ import {
 
 export default function Stats() {
   const router = useRouter();
-  const { stats, resetStats } = usePomodoroStats();
+  const { stats, resetStats, getActiveAchievements } = usePomodoroStats();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const formatTime = (seconds: number) => {
@@ -140,6 +140,74 @@ export default function Stats() {
                   </Text>
                 </Box>
               )}
+
+              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+                <Text className="text-2xl font-bold text-typography-900 mb-2">
+                  Skip Claims
+                </Text>
+                <Text
+                  style={{ fontFamily: 'DepartureMono' }}
+                  className="text-4xl font-bold text-typography-600 mb-2"
+                >
+                  {stats.totalSkipClaims}
+                </Text>
+                <Text className="text-typography-600 text-sm">
+                  Total claims skipped (temporary bonuses for next session)
+                </Text>
+                {stats.skipClaimModifier > 0 && (
+                  <Box className="mt-3 p-3 bg-green-50 rounded-lg">
+                    <Text className="text-green-800 text-sm font-medium text-center">
+                      Next session bonus: +
+                      {Math.round(
+                        (Math.pow(1.1, stats.skipClaimModifier) - 1) * 100
+                      )}
+                      % reward chance
+                    </Text>
+                  </Box>
+                )}
+              </Box>
+
+              <Box className="bg-background-50 dark:bg-background-0 rounded-xl p-6">
+                <Text className="text-2xl font-bold text-typography-900 mb-2">
+                  Active Achievements
+                </Text>
+                <Box className="gap-3">
+                  {getActiveAchievements().length > 0 ? (
+                    getActiveAchievements().map(achievement => (
+                      <Box
+                        key={achievement.id}
+                        className="flex-row items-center justify-between p-3 bg-background-0 rounded-lg"
+                      >
+                        <Box className="flex-row items-center">
+                          <Text className="text-2xl mr-3">
+                            {achievement.icon}
+                          </Text>
+                          <Box>
+                            <Text className="text-base font-bold text-typography-800">
+                              {achievement.name}
+                            </Text>
+                            <Text className="text-sm text-typography-600">
+                              {achievement.description}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box className="px-2 py-1 rounded-full bg-primary-600">
+                          <Text className="text-white text-xs font-medium">
+                            {achievement.rewardMultiplier >= 1
+                              ? `+${Math.round((achievement.rewardMultiplier - 1) * 100)}%`
+                              : `${Math.round(achievement.rewardMultiplier * 100)}%`}
+                          </Text>
+                        </Box>
+                      </Box>
+                    ))
+                  ) : (
+                    <Text className="text-typography-500 text-center py-4">
+                      No active achievements yet. Complete more pomodoros to
+                      unlock achievements!
+                    </Text>
+                  )}
+                </Box>
+              </Box>
 
               <Box className="mt-4 items-center">
                 <Button
