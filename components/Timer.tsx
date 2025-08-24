@@ -137,7 +137,7 @@ export const Timer: React.FC = () => {
           onPress={showTimerLengthSelector}
           className="active:opacity-70"
         >
-          <Box className="flex-row items-center">
+          <Box className="flex-row items-center mt-5">
             <Box className="w-16 h-30 rounded-xl items-center justify-center mx-0.5">
               <Text
                 style={{ fontFamily: 'DepartureMono' }}
