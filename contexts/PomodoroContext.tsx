@@ -1,11 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEFAULT_REWARD_CHANCE } from '../constants/Constants';
+import {
+  getActiveAchievements,
+  calculateBalancedRewardChance,
+  DEFAULT_POMODORO_LENGTH,
+} from '../constants/Achievements';
 
 interface PomodoroStats {
   totalSessions: number;
   totalTimeSpent: number;
   rewardChance: number;
+  currentStreak: number;
+  dailyStreak: number;
+  lastSessionDate: string;
+  lastSessionLength: number;
+  consumedAchievements: string[];
+  totalSkipClaims: number; // Total number of skip claims made
+  skipClaimModifier: number; // Bonus reward chance for next session after skipping
 }
 
 interface PomodoroContextType {
@@ -13,6 +25,10 @@ interface PomodoroContextType {
   addCompletedSession: (durationInSeconds: number) => void;
   resetStats: () => void;
   updateRewardChance: (chance: number) => void;
+  getActiveAchievements: () => any[];
+  getActiveAchievementsForSession: (currentSessionLength: number) => any[];
+  getCurrentRewardChance: (sessionLength: number) => number;
+  skipClaim: () => void; // Skip current claim and get bonus for next session
 }
 
 const PomodoroContext = createContext<PomodoroContextType | undefined>(
@@ -34,6 +50,13 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
     totalSessions: 0,
     totalTimeSpent: 0,
     rewardChance: DEFAULT_REWARD_CHANCE,
+    currentStreak: 0,
+    dailyStreak: 0,
+    lastSessionDate: '',
+    lastSessionLength: DEFAULT_POMODORO_LENGTH,
+    consumedAchievements: [],
+    totalSkipClaims: 0,
+    skipClaimModifier: 0,
   });
 
   useEffect(() => {
@@ -45,10 +68,20 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
       const savedStats = await AsyncStorage.getItem('pomodoroStats');
       if (savedStats) {
         const parsedStats = JSON.parse(savedStats);
-        if (parsedStats.rewardChance === undefined) {
-          parsedStats.rewardChance = DEFAULT_REWARD_CHANCE;
-        }
-        setStats(parsedStats);
+        const enhancedStats = {
+          totalSessions: parsedStats.totalSessions || 0,
+          totalTimeSpent: parsedStats.totalTimeSpent || 0,
+          rewardChance: parsedStats.rewardChance || DEFAULT_REWARD_CHANCE,
+          currentStreak: parsedStats.currentStreak || 0,
+          dailyStreak: parsedStats.dailyStreak || 0,
+          lastSessionDate: parsedStats.lastSessionDate || '',
+          lastSessionLength:
+            parsedStats.lastSessionLength || DEFAULT_POMODORO_LENGTH,
+          consumedAchievements: parsedStats.consumedAchievements || [],
+          totalSkipClaims: parsedStats.totalSkipClaims || 0,
+          skipClaimModifier: parsedStats.skipClaimModifier || 0,
+        };
+        setStats(enhancedStats);
       }
     } catch (error) {
       console.error('Error loading pomodoro stats:', error);
@@ -63,11 +96,75 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const updateDailyStreak = (currentDate: string) => {
+    const today = new Date().toISOString().split('T')[0];
+    const lastDate = stats.lastSessionDate
+      ? new Date(stats.lastSessionDate).toISOString().split('T')[0]
+      : '';
+
+    if (lastDate === today) {
+      return stats.dailyStreak;
+    }
+
+    if (
+      lastDate ===
+      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    ) {
+      return stats.dailyStreak + 1;
+    } else {
+      return 1;
+    }
+  };
+
   const addCompletedSession = (durationInSeconds: number) => {
+    const today = new Date().toISOString().split('T')[0];
+    const lastDate = stats.lastSessionDate
+      ? new Date(stats.lastSessionDate).toISOString().split('T')[0]
+      : '';
+
+    let newCurrentStreak = stats.currentStreak;
+    if (lastDate === today) {
+      newCurrentStreak += 1;
+    } else if (
+      lastDate ===
+      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    ) {
+      newCurrentStreak += 1;
+    } else {
+      newCurrentStreak = 1;
+    }
+
+    const newDailyStreak = updateDailyStreak(today);
+
+    const activeAchievements = getActiveAchievements(
+      stats.totalSessions,
+      stats.currentStreak,
+      stats.dailyStreak,
+      stats.lastSessionLength,
+      stats.consumedAchievements
+    );
+    const newConsumedAchievements = [...stats.consumedAchievements];
+
+    activeAchievements.forEach(achievement => {
+      if (
+        achievement.isConsumable &&
+        !stats.consumedAchievements.includes(achievement.id)
+      ) {
+        newConsumedAchievements.push(achievement.id);
+      }
+    });
+
     const newStats = {
       totalSessions: stats.totalSessions + 1,
       totalTimeSpent: stats.totalTimeSpent + durationInSeconds,
       rewardChance: stats.rewardChance,
+      currentStreak: newCurrentStreak,
+      dailyStreak: newDailyStreak,
+      lastSessionDate: today,
+      lastSessionLength: durationInSeconds,
+      consumedAchievements: newConsumedAchievements,
+      totalSkipClaims: stats.totalSkipClaims,
+      skipClaimModifier: 0, // Reset modifier after each session
     };
     setStats(newStats);
     saveStats(newStats);
@@ -78,6 +175,13 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
       totalSessions: 0,
       totalTimeSpent: 0,
       rewardChance: DEFAULT_REWARD_CHANCE,
+      currentStreak: 0,
+      dailyStreak: 0,
+      lastSessionDate: '',
+      lastSessionLength: DEFAULT_POMODORO_LENGTH,
+      consumedAchievements: [],
+      totalSkipClaims: 0,
+      skipClaimModifier: 0,
     };
     setStats(newStats);
     saveStats(newStats);
@@ -92,9 +196,61 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({
     saveStats(newStats);
   };
 
+  const getActiveAchievementsList = () => {
+    return getActiveAchievements(
+      stats.totalSessions,
+      stats.currentStreak,
+      stats.dailyStreak,
+      stats.lastSessionLength,
+      stats.consumedAchievements
+    );
+  };
+
+  const getActiveAchievementsForSession = (currentSessionLength: number) => {
+    return getActiveAchievements(
+      stats.totalSessions,
+      stats.currentStreak,
+      stats.dailyStreak,
+      currentSessionLength,
+      stats.consumedAchievements
+    );
+  };
+
+  const getCurrentRewardChance = (sessionLength: number) => {
+    const activeAchievements = getActiveAchievementsForSession(sessionLength);
+    const baseChance = calculateBalancedRewardChance(
+      stats.rewardChance,
+      sessionLength,
+      activeAchievements
+    );
+
+    const modifierMultiplier = Math.pow(1.1, stats.skipClaimModifier);
+    const finalChance = baseChance * modifierMultiplier;
+    return Math.min(finalChance, 100);
+  };
+
+  const skipClaim = () => {
+    const newStats = {
+      ...stats,
+      totalSkipClaims: stats.totalSkipClaims + 1,
+      skipClaimModifier: stats.skipClaimModifier + 1,
+    };
+    setStats(newStats);
+    saveStats(newStats);
+  };
+
   return (
     <PomodoroContext.Provider
-      value={{ stats, addCompletedSession, resetStats, updateRewardChance }}
+      value={{
+        stats,
+        addCompletedSession,
+        resetStats,
+        updateRewardChance,
+        getActiveAchievements: getActiveAchievementsList,
+        getActiveAchievementsForSession,
+        getCurrentRewardChance,
+        skipClaim,
+      }}
     >
       {children}
     </PomodoroContext.Provider>

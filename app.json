@@ -8,6 +8,12 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "fonts": [
+      {
+        "asset": "./assets/fonts/DepartureMono-Regular.otf",
+        "family": "DepartureMono"
+      }
+    ],
     "ios": {
       "supportsTablet": true
     },
