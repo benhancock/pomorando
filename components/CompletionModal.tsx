@@ -10,6 +10,8 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
 } from '@/components/ui/alert-dialog';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Icon, CloseIcon } from '@/components/ui/icon';
 
 interface CompletionModalProps {
   isOpen: boolean;
@@ -33,52 +35,81 @@ export const CompletionModal: React.FC<CompletionModalProps> = ({
       <AlertDialogBackdrop />
       <AlertDialogContent>
         <AlertDialogHeader>
-          <Text className="text-typography-900 text-xl font-semibold">
-            Session Complete
-          </Text>
+          <Box className="flex-row items-center justify-center">
+            <Text className="text-typography-900 text-xl font-semibold">
+              Session Complete
+            </Text>
+          </Box>
         </AlertDialogHeader>
         <AlertDialogBody>
-          <Text className="text-typography-700 text-base text-center mb-4">
-            Session complete! Choose your reward option.
-          </Text>
-          {skipClaimModifier > 0 && (
-            <Text className="text-primary-600 text-sm text-center mb-4 font-medium">
-              You have {skipClaimModifier} skip bonus(es) active for your next
-              session!
+          <Box
+            className="outline rounded-lg px-4 pt-3 relative my-4"
+            style={{
+              borderWidth: 1,
+              borderColor: 'grey',
+              backgroundColor: '#b0b0b030',
+            }}
+          >
+            <Box className="absolute top-1 right-1">
+              <Icon as={CloseIcon} />
+            </Box>
+
+            <Box className="flex-row items-center justify-center">
+              <MaterialCommunityIcons
+                name="gift-outline"
+                size={50}
+                color="white"
+                className="mb-4 mt-2"
+              />
+            </Box>
+
+            <Text className="text-typography-700 text-base mb-4 text-center">
+              You had a ___% chance of earning a reward. Would you like to:{' '}
+              {'\n'}
+              <Box className="pt-2">
+                <Text
+                  className="text-success-600 px-1 -mb-2 rounded-lg"
+                  style={{ borderWidth: 1, borderColor: 'green' }}
+                >
+                  Claim
+                </Text>
+              </Box>{' '}
+              your possible reward now, or
+              {'\n'}
+              <Box className="pt-4">
+                <Text
+                  className="text-warning-600 px-1 -mb-2 rounded-lg"
+                  style={{ borderWidth: 1, borderColor: 'orange' }}
+                >
+                  Skip
+                </Text>
+              </Box>{' '}
+              it this time in exchange for a greater chance at a reward next
+              time?
             </Text>
-          )}
-          {skipClaimModifier > 0 && (
-            <Text className="text-green-600 text-sm text-center mb-4 font-medium">
-              Next session reward chance: +
-              {Math.round((Math.pow(1.1, skipClaimModifier) - 1) * 100)}%
-            </Text>
-          )}
-          <Text className="text-gray-600 text-sm text-center mb-4">
-            Total skip claims: {totalSkipClaims}
-          </Text>
+          </Box>
         </AlertDialogBody>
         <AlertDialogFooter>
-          <Box className="flex-row gap-3 w-full">
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={onSkipClaim}
-              className="flex-1 rounded-full border-2 border-typography-300"
-            >
-              <Text className="text-typography-700 font-medium">
-                Skip Claim
-              </Text>
-            </Button>
+          <Box className="flex-col items-center gap-3 w-full">
             <Button
               variant="solid"
               action="primary"
               onPress={onClaimBreak}
-              className="flex-1 rounded-full border-2 border-primary-600"
-              style={{ backgroundColor: 'transparent' }}
+              className="rounded-full border-2 border-primary-600 inline-flex"
+              style={{ backgroundColor: 'transparent', borderColor: 'green' }}
             >
-              <Text className="text-typography-900 font-medium">
-                Claim Break
+              <Text className="text-success-600 font-medium">
+                Claim Chance at Reward
               </Text>
+            </Button>
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={onSkipClaim}
+              className="rounded-full border-2 border-typography-300 inline-flex"
+              style={{ backgroundColor: 'transparent', borderColor: 'orange' }}
+            >
+              <Text className="text-warning-600 font-medium">Skip Reward</Text>
             </Button>
           </Box>
         </AlertDialogFooter>
